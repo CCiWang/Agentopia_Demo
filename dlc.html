@@ -1,0 +1,435 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Agentopia · Social Experience Package</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@500;600;700&family=Chakra+Petch:wght@400;500;600;700&display=swap" rel="stylesheet" />
+<style>
+  :root {
+    --bg: #15101f;
+    --bg-2: #1e1729;
+    --card: #241c33;
+    --card-2: #2d2440;
+    --border: rgba(242, 193, 78, 0.16);
+    --text: #f6f0e2;
+    --muted: #a99bc0;
+    --gold: #f2c14e;
+    --gold-2: #e0a13c;
+    --btn-ink: #241602;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body {
+    font-family: 'Chakra Petch', 'PingFang SC', 'Microsoft YaHei', sans-serif;
+    background: radial-gradient(1200px 600px at 70% -10%, #2a2140 0%, var(--bg) 55%);
+    color: var(--text); line-height: 1.6; -webkit-font-smoothing: antialiased; min-height: 100vh;
+  }
+  h1, h2, h3 { font-family: 'Rajdhani', 'Chakra Petch', sans-serif; }
+  a { color: inherit; text-decoration: none; }
+  .wrap { max-width: 1100px; margin: 0 auto; padding: 0 24px; }
+
+  /* Landing */
+  #landing { padding: 64px 0 80px; }
+  .land-head { text-align: center; margin-bottom: 40px; }
+  .land-head .kicker { color: var(--gold); font-size: 12px; letter-spacing: 3px; font-weight: 700; text-transform: uppercase; }
+  .land-head h1 { font-size: 42px; font-weight: 700; margin-top: 8px; }
+  .land-head h1 span { background: linear-gradient(120deg, var(--gold), #ffd98a); -webkit-background-clip: text; background-clip: text; color: transparent; }
+  .land-head p { color: var(--muted); font-size: 15px; margin-top: 10px; max-width: 640px; margin-left: auto; margin-right: auto; }
+  .back-link { position: fixed; top: 18px; left: 18px; z-index: 30; color: var(--muted); font-size: 13px; font-weight: 600; }
+  .back-link:hover { color: var(--text); }
+
+  .cards { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
+  .card {
+    background: var(--card); border: 1px solid var(--border); border-radius: 20px; padding: 28px 24px;
+    display: flex; flex-direction: column; cursor: pointer; transition: transform .18s ease, border-color .18s ease, box-shadow .18s ease;
+  }
+  .card:hover { transform: translateY(-6px); border-color: var(--gold); box-shadow: 0 16px 40px rgba(0,0,0,.35); }
+  .card .emoji { font-size: 42px; margin-bottom: 16px; }
+  .card h3 { font-size: 22px; margin-bottom: 4px; }
+  .card .zh { font-size: 13px; color: var(--muted); margin-bottom: 12px; }
+  .card .desc { font-size: 13px; color: var(--muted); margin-bottom: 18px; }
+  .card .price { font-size: 22px; font-weight: 700; color: var(--gold); }
+  .card .price small { font-size: 12px; color: var(--muted); font-weight: 400; }
+  .card .cta { margin-top: 16px; background: linear-gradient(135deg, var(--gold), var(--gold-2)); color: var(--btn-ink); border: 0; border-radius: 12px; padding: 12px; font-weight: 700; font-size: 14px; cursor: pointer; text-transform: uppercase; letter-spacing: .5px; }
+
+  /* Experience */
+  #experience { display: none; position: fixed; inset: 0; z-index: 20; background: #0a0c12; flex-direction: column; }
+  #experience.open { display: flex; }
+  .exp-top { display: flex; align-items: center; gap: 14px; padding: 14px 20px; background: rgba(20,15,30,.7); border-bottom: 1px solid var(--border); z-index: 5; }
+  .exp-top button { background: var(--card-2); border: 1px solid var(--border); color: var(--text); border-radius: 10px; padding: 8px 16px; cursor: pointer; font-size: 13px; font-weight: 600; }
+  .exp-top .exp-title { font-family: 'Rajdhani'; font-size: 20px; font-weight: 700; }
+  .exp-stage { position: relative; flex: 1; min-height: 0; }
+  #scene-container { position: absolute; inset: 0; }
+  #scene-container canvas { display: block; width: 100%; height: 100%; touch-action: none; image-rendering: pixelated; image-rendering: crisp-edges; }
+  .exp-banner {
+    position: absolute; left: 50%; bottom: 24px; transform: translateX(-50%); z-index: 5;
+    background: rgba(20,15,30,.82); border: 1px solid var(--border); border-radius: 16px; padding: 14px 22px; text-align: center;
+    box-shadow: 0 10px 30px rgba(0,0,0,.4); white-space: nowrap; max-width: 90%;
+  }
+  .exp-banner .b-title { font-family: 'Rajdhani'; font-size: 22px; font-weight: 700; color: var(--gold); }
+  .exp-banner .b-sub { font-size: 13px; color: var(--muted); margin-top: 2px; }
+  .exp-hint { position: absolute; top: 14px; right: 18px; z-index: 5; font-size: 11px; color: var(--muted); background: rgba(20,15,30,.6); padding: 4px 12px; border-radius: 999px; }
+
+  @media (max-width: 860px) {
+    .cards { grid-template-columns: 1fr; }
+    .land-head h1 { font-size: 32px; }
+  }
+</style>
+</head>
+<body>
+  <a class="back-link" href="index.html">← Back to Agentopia</a>
+
+  <!-- 落地页 -->
+  <section id="landing">
+    <div class="wrap">
+      <div class="land-head">
+        <div class="kicker">Social Experience Package · DLC</div>
+        <h1>Celebrate real-life moments, <span>together</span></h1>
+        <p>为朋友毕业、生日、好友周年等特殊节点，购买专属剧情 / 主题世界，让你的 Agent 和朋友们的 Agent 一起生成一个纪念事件。</p>
+      </div>
+      <div class="cards">
+        <div class="card" onclick="openScene('birthday')">
+          <div class="emoji">🎂</div>
+          <h3>Birthday Party</h3>
+          <div class="zh">生日</div>
+          <p class="desc">专属生日主题世界，你的 Agent 和朋友 Agent 一起庆生、许愿、切蛋糕。</p>
+          <div class="price">$4.99 <small>/ 一次性</small></div>
+          <button class="cta">体验预览</button>
+        </div>
+        <div class="card" onclick="openScene('graduation')">
+          <div class="emoji">🎓</div>
+          <h3>Graduation</h3>
+          <div class="zh">毕业</div>
+          <p class="desc">毕业典礼主题，纪念人生重要节点，Agent 们为你鼓掌、抛学士帽。</p>
+          <div class="price">$4.99 <small>/ 一次性</small></div>
+          <button class="cta">体验预览</button>
+        </div>
+        <div class="card" onclick="openScene('anniversary')">
+          <div class="emoji">💞</div>
+          <h3>Friendship Anniversary</h3>
+          <div class="zh">好友周年</div>
+          <p class="desc">好友周年纪念，重温你们共同经历的回忆，Agent 一起举杯庆祝。</p>
+          <div class="price">$4.99 <small>/ 一次性</small></div>
+          <button class="cta">体验预览</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 事件体验 -->
+  <div id="experience">
+    <div class="exp-top">
+      <button id="backBtn">← 返回套餐</button>
+      <div class="exp-title" id="expTitle">Birthday Party</div>
+    </div>
+    <div class="exp-stage">
+      <div id="scene-container"></div>
+      <div class="exp-hint">🖱 拖动左右视角 · 滚轮缩放</div>
+      <div class="exp-banner" id="expBanner"></div>
+    </div>
+  </div>
+
+  <script type="importmap">
+  {
+    "imports": {
+      "three": "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js",
+      "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/"
+    }
+  }
+  </script>
+
+  <script type="module">
+    import * as THREE from 'three';
+    import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
+    import { RoundedBoxGeometry } from 'three/addons/geometries/RoundedBoxGeometry.js';
+
+    // ---------- 基础 ----------
+    const container = document.getElementById('scene-container');
+    const renderer = new THREE.WebGLRenderer({ antialias: false });
+    renderer.setPixelRatio(1);
+    renderer.shadowMap.enabled = true;
+    renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+    renderer.toneMapping = THREE.ACESFilmicToneMapping;
+    renderer.toneMappingExposure = 1.05;
+    container.appendChild(renderer.domElement);
+
+    const scene = new THREE.Scene();
+    scene.background = new THREE.Color(0x1c1626);
+    scene.fog = new THREE.Fog(0x1c1626, 16, 44);
+    const camera = new THREE.PerspectiveCamera(50, 1, 0.1, 200);
+    camera.position.set(0, 7, 10);
+
+    const controls = new OrbitControls(camera, renderer.domElement);
+    controls.enableDamping = true; controls.dampingFactor = 0.08;
+    controls.target.set(0, 0.6, 0);
+    controls.minPolarAngle = 0.85; controls.maxPolarAngle = 1.2;
+    controls.minAzimuthAngle = -0.6; controls.maxAzimuthAngle = 0.6;
+    controls.minDistance = 4; controls.maxDistance = 20;
+    controls.enablePan = false; controls.update();
+
+    const hemi = new THREE.HemisphereLight(0xfff3dd, 0xd9c6a8, 1.25); scene.add(hemi);
+    const ambient = new THREE.AmbientLight(0xfff0da, 0.55); scene.add(ambient);
+    const sun = new THREE.DirectionalLight(0xffe3b8, 1.0); sun.position.set(6, 10, 5);
+    sun.castShadow = true; sun.shadow.mapSize.set(2048, 2048);
+    sun.shadow.camera.near = 1; sun.shadow.camera.far = 50;
+    sun.shadow.camera.left = -16; sun.shadow.camera.right = 16; sun.shadow.camera.top = 16; sun.shadow.camera.bottom = -16;
+    sun.shadow.bias = -0.0004; scene.add(sun);
+    const fill = new THREE.DirectionalLight(0xfff6e8, 0.6); fill.position.set(-6, 6, -6); scene.add(fill);
+
+    // ---------- 材质/工具 ----------
+    function makeToonGradient() {
+      const c = document.createElement('canvas'); c.width = 4; c.height = 1;
+      const g = c.getContext('2d');
+      ['#7a8a9a', '#a9bacb', '#d8e4ee', '#ffffff'].forEach((s, i) => { g.fillStyle = s; g.fillRect(i, 0, 1, 1); });
+      const tex = new THREE.CanvasTexture(c);
+      tex.minFilter = THREE.NearestFilter; tex.magFilter = THREE.NearestFilter;
+      tex.colorSpace = THREE.SRGBColorSpace; tex.needsUpdate = true; return tex;
+    }
+    const toonGradient = makeToonGradient();
+    const mat = (color, opts = {}) => new THREE.MeshToonMaterial({ color, gradientMap: toonGradient, ...opts });
+    function box(w, h, d, color, opts) {
+      const r = Math.min(0.08, w / 3, h / 3, d / 3);
+      const m = new THREE.Mesh(new RoundedBoxGeometry(w, h, d, 3, r), mat(color, opts));
+      m.castShadow = true; m.receiveShadow = true; return m;
+    }
+    function place(obj, x, y, z, ry = 0) { obj.position.set(x, y, z); obj.rotation.y = ry; return obj; }
+    function lighten(hex, amt) {
+      const n = parseInt(hex.slice(1), 16);
+      let r = (n >> 16) & 255, g = (n >> 8) & 255, b = n & 255;
+      r = Math.min(255, Math.round(r + (255 - r) * amt));
+      g = Math.min(255, Math.round(g + (255 - g) * amt));
+      b = Math.min(255, Math.round(b + (255 - b) * amt));
+      return '#' + ((1 << 24) + (r << 16) + (g << 8) + b).toString(16).slice(1);
+    }
+
+    // ---------- 角色 ----------
+    function addEars(g, type, furMat) {
+      const inner = mat(0xf7c9d8);
+      if (type === 'bunny') {
+        [-1, 1].forEach((s) => { const e = new THREE.Mesh(new THREE.CapsuleGeometry(0.1, 0.52, 6, 12), furMat); e.position.set(s * 0.2, 2.06, 0); e.rotation.z = s * 0.12; e.scale.set(1, 1, 0.6); g.add(e); });
+      } else if (type === 'cat' || type === 'fox') {
+        [-1, 1].forEach((s) => { const e = new THREE.Mesh(new THREE.ConeGeometry(0.16, 0.34, 8), furMat); e.position.set(s * 0.26, 1.98, 0); e.rotation.z = s * 0.25; g.add(e); const inr = new THREE.Mesh(new THREE.ConeGeometry(0.09, 0.2, 8), inner); inr.position.set(s * 0.26, 2.0, 0.05); inr.rotation.z = s * 0.25; g.add(inr); });
+      } else if (type === 'bear') {
+        [-1, 1].forEach((s) => { const e = new THREE.Mesh(new THREE.SphereGeometry(0.15, 14, 12), furMat); e.position.set(s * 0.28, 1.98, 0); g.add(e); const inr = new THREE.Mesh(new THREE.SphereGeometry(0.08, 10, 10), inner); inr.position.set(s * 0.28, 1.98, 0.08); g.add(inr); });
+      } else if (type === 'dog') {
+        [-1, 1].forEach((s) => { const e = new THREE.Mesh(new THREE.CapsuleGeometry(0.11, 0.32, 6, 12), furMat); e.position.set(s * 0.34, 1.64, 0); e.rotation.z = s * 0.9; e.scale.set(1, 1, 0.6); g.add(e); });
+      } else {
+        [-1, 1].forEach((s) => { const e = new THREE.Mesh(new THREE.SphereGeometry(0.09, 12, 10), furMat); e.position.set(s * 0.24, 1.95, 0); g.add(e); });
+      }
+    }
+    function addAccessory(g, acc) {
+      if (acc === 'crown' || acc === 'partyhat') {
+        const hat = new THREE.Mesh(new THREE.ConeGeometry(0.2, 0.34, 10), mat(acc === 'crown' ? 0xf2c14e : 0xff6b9d));
+        hat.position.y = 2.12; g.add(hat);
+        const pom = new THREE.Mesh(new THREE.SphereGeometry(0.07, 8, 8), mat(0xffffff)); pom.position.y = 2.3; g.add(pom);
+      } else if (acc === 'gradcap') {
+        const top = box(0.5, 0.06, 0.5, 0x2b2b33); top.position.y = 2.02; g.add(top);
+        const cap = new THREE.Mesh(new THREE.CylinderGeometry(0.18, 0.18, 0.1, 12), mat(0x2b2b33)); cap.position.y = 1.96; g.add(cap);
+        const tassel = new THREE.Mesh(new THREE.CylinderGeometry(0.02, 0.02, 0.3, 6), mat(0xf2c14e)); tassel.position.set(0.24, 1.85, 0.1); g.add(tassel);
+      }
+    }
+    function createAgent(cfg) {
+      const g = new THREE.Group();
+      const furMat = mat(cfg.color), clothMat = mat(cfg.cloth || cfg.color);
+      const bodyPts = [
+        new THREE.Vector2(0.01, 0.0), new THREE.Vector2(0.14, 0.02), new THREE.Vector2(0.3, 0.2),
+        new THREE.Vector2(0.34, 0.5), new THREE.Vector2(0.27, 0.7), new THREE.Vector2(0.18, 0.8), new THREE.Vector2(0.02, 0.84)
+      ];
+      const body = new THREE.Mesh(new THREE.LatheGeometry(bodyPts, 24), clothMat); body.position.y = 0.5; body.castShadow = true; g.add(body);
+      const armGeo = new THREE.CapsuleGeometry(0.1, 0.24, 6, 16);
+      [-1, 1].forEach((s) => { const arm = new THREE.Mesh(armGeo, clothMat); arm.position.set(s * 0.5, 0.82, 0); arm.rotation.z = s * 0.4; arm.castShadow = true; g.add(arm); const hand = new THREE.Mesh(new THREE.SphereGeometry(0.11, 14, 12), furMat); hand.position.set(s * 0.62, 0.66, 0); g.add(hand); });
+      const legGeo = new THREE.CapsuleGeometry(0.09, 0.16, 6, 12);
+      [-1, 1].forEach((s) => { const leg = new THREE.Mesh(legGeo, clothMat); leg.position.set(s * 0.18, 0.3, 0); g.add(leg); const foot = new THREE.Mesh(new THREE.SphereGeometry(0.15, 14, 12), furMat); foot.position.set(s * 0.18, 0.1, 0.08); foot.scale.set(1, 0.65, 1.3); g.add(foot); });
+      const head = new THREE.Mesh(new THREE.SphereGeometry(0.44, 32, 32), furMat); head.position.y = 1.52; head.castShadow = true; g.add(head);
+      const muzzle = new THREE.Mesh(new THREE.SphereGeometry(0.2, 16, 12), mat(lighten(cfg.color, 0.45))); muzzle.position.set(0, 1.4, 0.34); muzzle.scale.set(1.05, 0.75, 0.55); g.add(muzzle);
+      const eyeMat = new THREE.MeshStandardMaterial({ color: 0x2b2b33, roughness: 0.25 });
+      [-1, 1].forEach((s) => { const eye = new THREE.Mesh(new THREE.SphereGeometry(0.1, 14, 12), eyeMat); eye.position.set(s * 0.17, 1.6, 0.36); eye.scale.set(0.8, 1.15, 0.5); g.add(eye); const hl = new THREE.Mesh(new THREE.SphereGeometry(0.035, 8, 8), new THREE.MeshBasicMaterial({ color: 0xffffff })); hl.position.set(s * 0.17 - 0.03, 1.64, 0.44); g.add(hl); });
+      const nose = new THREE.Mesh(new THREE.SphereGeometry(0.045, 10, 8), mat(0x5a3a30)); nose.position.set(0, 1.5, 0.42); g.add(nose);
+      const mouth = new THREE.Mesh(new THREE.TorusGeometry(0.07, 0.02, 8, 16, Math.PI), mat(0x7a4444)); mouth.position.set(0, 1.44, 0.42); mouth.rotation.x = Math.PI; mouth.rotation.z = Math.PI; g.add(mouth);
+      [-1, 1].forEach((s) => { const cheek = new THREE.Mesh(new THREE.SphereGeometry(0.07, 10, 10), mat(0xf7a8a8)); cheek.position.set(s * 0.27, 1.44, 0.32); cheek.scale.set(1, 0.8, 0.5); g.add(cheek); });
+      addEars(g, cfg.ear || 'cat', furMat);
+      if (cfg.hair) { const h = mat(cfg.hair); const cap = new THREE.Mesh(new THREE.SphereGeometry(0.455, 24, 16, 0, Math.PI * 2, 0, Math.PI * 0.55), h); cap.position.y = 1.52; g.add(cap); const fr = new THREE.Mesh(new THREE.SphereGeometry(0.2, 14, 12), h); fr.position.set(0, 1.78, 0.28); fr.scale.set(1.5, 0.6, 0.5); g.add(fr); }
+      addAccessory(g, cfg.accessory);
+      return g;
+    }
+
+    // ---------- 道具 ----------
+    function createCake() {
+      const g = new THREE.Group();
+      const b1 = new THREE.Mesh(new THREE.CylinderGeometry(0.5, 0.5, 0.2, 20), mat(0xf6e7d8)); b1.position.y = 0.1; g.add(b1);
+      const b2 = new THREE.Mesh(new THREE.CylinderGeometry(0.34, 0.34, 0.18, 20), mat(0xf2c14e)); b2.position.y = 0.28; g.add(b2);
+      const b3 = new THREE.Mesh(new THREE.CylinderGeometry(0.2, 0.2, 0.16, 16), mat(0xe88fb0)); b3.position.y = 0.44; g.add(b3);
+      for (let i = 0; i < 4; i++) { const a = i * Math.PI / 2; const candle = new THREE.Mesh(new THREE.CylinderGeometry(0.02, 0.02, 0.18, 6), mat(0xff6b9d)); candle.position.set(Math.cos(a) * 0.12, 0.58, Math.sin(a) * 0.12); g.add(candle); const flame = new THREE.Mesh(new THREE.SphereGeometry(0.03, 8, 8), new THREE.MeshBasicMaterial({ color: 0xffd166 })); flame.position.set(Math.cos(a) * 0.12, 0.68, Math.sin(a) * 0.12); g.add(flame); }
+      return g;
+    }
+    function createBalloon(color) {
+      const g = new THREE.Group();
+      const b = new THREE.Mesh(new THREE.SphereGeometry(0.28, 16, 14), mat(color)); b.position.y = 0.4; g.add(b);
+      const knot = new THREE.Mesh(new THREE.ConeGeometry(0.06, 0.12, 8), mat(color)); knot.position.y = 0.14; knot.rotation.x = Math.PI; g.add(knot);
+      const string = new THREE.Mesh(new THREE.CylinderGeometry(0.008, 0.008, 0.7, 6), mat(0xcccccc)); string.position.y = -0.15; g.add(string);
+      return g;
+    }
+    function createGift(color) {
+      const g = new THREE.Group();
+      const b = box(0.5, 0.5, 0.5, color); b.position.y = 0.25; g.add(b);
+      const ribbon = box(0.52, 0.52, 0.1, 0xf2c14e); ribbon.position.y = 0.25; g.add(ribbon);
+      const ribbon2 = box(0.1, 0.52, 0.52, 0xf2c14e); ribbon2.position.y = 0.25; g.add(ribbon2);
+      return g;
+    }
+    function createStage() {
+      const g = new THREE.Group();
+      const base = box(6, 0.4, 3, 0x8a6b4a); base.position.y = 0.2; g.add(base);
+      const step = box(6.6, 0.2, 3.4, 0x9a7b5a); step.position.y = 0.1; g.add(step);
+      return g;
+    }
+    function createDiploma() {
+      const g = new THREE.Group();
+      const scroll = new THREE.Mesh(new THREE.CylinderGeometry(0.08, 0.08, 0.4, 12), mat(0xf5ecd7)); scroll.rotation.z = Math.PI / 2; g.add(scroll);
+      const ribbon = new THREE.Mesh(new THREE.TorusGeometry(0.08, 0.02, 8, 12), mat(0xd03070)); ribbon.position.y = 0.02; g.add(ribbon);
+      return g;
+    }
+    function createFrame(color) {
+      const g = new THREE.Group();
+      const f = box(0.8, 0.6, 0.06, 0x8a6b4a); g.add(f);
+      const inner = box(0.6, 0.42, 0.04, color); inner.position.z = 0.01; g.add(inner);
+      return g;
+    }
+    function createCup(color) {
+      const g = new THREE.Group();
+      const cup = new THREE.Mesh(new THREE.CylinderGeometry(0.12, 0.1, 0.18, 12), mat(color)); cup.position.y = 0.1; g.add(cup);
+      const handle = new THREE.Mesh(new THREE.TorusGeometry(0.06, 0.02, 8, 10), mat(color)); handle.position.set(0.14, 0.1, 0); g.add(handle);
+      return g;
+    }
+    function createConfetti(count, area) {
+      const g = new THREE.Group();
+      const colors = [0xf2c14e, 0xff6b9d, 0x5aa9e6, 0x7ed0a0, 0x9b7bd0];
+      for (let i = 0; i < count; i++) {
+        const p = box(0.08, 0.02, 0.08, colors[i % colors.length]);
+        p.position.set((Math.random() - 0.5) * area, 0.02, (Math.random() - 0.5) * area);
+        p.rotation.y = Math.random() * Math.PI; g.add(p);
+      }
+      return g;
+    }
+    function floor() {
+      const f = new THREE.Mesh(new THREE.PlaneGeometry(20, 20), mat(0x2a2533));
+      f.rotation.x = -Math.PI / 2; f.receiveShadow = true; return f;
+    }
+    function addAgent(root, cfg, x, z, ry) {
+      const a = createAgent(cfg); a.position.set(x, 0, z); a.rotation.y = ry; root.add(a); return a;
+    }
+
+    // ---------- 三个场景 ----------
+    const SCENES = {
+      birthday: {
+        title: 'Birthday Party', banner: { t: '🎂 Happy Birthday, Momo!', s: '你的 Agent 和朋友 Agent 一起庆生许愿' },
+        build(root) {
+          root.add(floor());
+          const table = new THREE.Mesh(new THREE.CylinderGeometry(0.9, 0.9, 0.1, 24), mat(0x8a6b4a)); table.position.y = 0.55; table.castShadow = true; root.add(table);
+          const leg = new THREE.Mesh(new THREE.CylinderGeometry(0.12, 0.16, 0.55, 10), mat(0x5a4a3a)); leg.position.y = 0.27; root.add(leg);
+          root.add(place(createCake(), 0, 0.6, 0));
+          root.add(place(createBalloon(0xff6b9d), -1.8, 0, -1.2));
+          root.add(place(createBalloon(0x5aa9e6), 1.8, 0, -1.2));
+          root.add(place(createBalloon(0xf2c14e), 0, 0, -2));
+          root.add(place(createGift(0xff6b9d), -1.5, 0, 1.4));
+          root.add(place(createGift(0x5aa9e6), 1.5, 0, 1.4));
+          root.add(place(createConfetti(60, 6), 0, 0, 0));
+          addAgent(root, { color: '#f5cf6b', cloth: '#e88fb0', ear: 'hamster', accessory: 'partyhat' }, 0, -0.6, 0);
+          addAgent(root, { color: '#f6e7d4', cloth: '#7ed0a0', ear: 'bunny', accessory: null }, -1.6, 0.9, 0.4);
+          addAgent(root, { color: '#5fd0c0', cloth: '#f2c14e', ear: 'cat', accessory: null }, 1.6, 0.9, -0.4);
+        }
+      },
+      graduation: {
+        title: 'Graduation', banner: { t: '🎓 Congratulations, Class of 2026!', s: 'Agent 们为你鼓掌、抛学士帽' },
+        build(root) {
+          root.add(floor());
+          root.add(place(createStage(), 0, 0, -2));
+          const podium = box(1.2, 0.9, 0.9, 0x9a7b5a); podium.position.set(0, 0.4, -2); root.add(podium);
+          root.add(place(createDiploma(), 0, 1.2, -2));
+          root.add(place(createConfetti(60, 6), 0, 0, 0));
+          addAgent(root, { color: '#7fa8d9', cloth: '#e8a33d', ear: 'bear', accessory: 'gradcap' }, 0, 1.0, -2, 0);
+          addAgent(root, { color: '#9b7bd0', cloth: '#44505f', ear: 'dog', accessory: null }, -2, 0, 1.5, 0.5);
+          addAgent(root, { color: '#f2f2f2', cloth: '#9b7bd0', ear: 'cat', hair: '#3a3a3a', accessory: null }, 2, 0, 1.5, -0.5);
+        }
+      },
+      anniversary: {
+        title: 'Friendship Anniversary', banner: { t: '💞 Cheers to 3 Years of Friendship!', s: '重温共同回忆，Agent 一起举杯庆祝' },
+        build(root) {
+          root.add(floor());
+          const wall = box(0.4, 2.6, 8, 0x8a1f1f); wall.position.set(0, 1.3, -3.5); root.add(wall);
+          root.add(place(createFrame(0x7ed0a0), -1.2, 0, -3.28));
+          root.add(place(createFrame(0xe88fb0), 0, 0, -3.28));
+          root.add(place(createFrame(0x5aa9e6), 1.2, 0, -3.28));
+          const table = new THREE.Mesh(new THREE.CylinderGeometry(0.7, 0.7, 0.1, 24), mat(0x8a6b4a)); table.position.y = 0.5; table.castShadow = true; root.add(table);
+          root.add(place(createCup(0xffffff), -0.3, 0.55, 0));
+          root.add(place(createCup(0xffd1dc), 0.3, 0.55, 0));
+          root.add(place(createBalloon(0xe88fb0), -2, 0, -0.5));
+          root.add(place(createBalloon(0xf2c14e), 2, 0, -0.5));
+          root.add(place(createConfetti(30, 4), 0, 0, 1));
+          addAgent(root, { color: '#f5cf6b', cloth: '#e88fb0', ear: 'hamster', accessory: 'crown' }, -1.3, 0.6, -0.2, 0.5);
+          addAgent(root, { color: '#f6e7d4', cloth: '#7ed0a0', ear: 'bunny', accessory: 'hairpin' }, 1.3, 0.6, -0.2, -0.5);
+        }
+      }
+    };
+
+    // ---------- 场景管理 ----------
+    let currentGroup = null;
+    const landing = document.getElementById('landing');
+    const experience = document.getElementById('experience');
+    const expTitle = document.getElementById('expTitle');
+    const expBanner = document.getElementById('expBanner');
+    const backBtn = document.getElementById('backBtn');
+
+    window.openScene = function (key) {
+      const def = SCENES[key];
+      if (currentGroup) scene.remove(currentGroup);
+      currentGroup = new THREE.Group();
+      def.build(currentGroup);
+      scene.add(currentGroup);
+      expTitle.textContent = def.title;
+      expBanner.innerHTML = `<div class="b-title">${def.banner.t}</div><div class="b-sub">${def.banner.s}</div>`;
+      landing.style.display = 'none';
+      experience.classList.add('open');
+      flyTo([0, 7, 10], [0, 0.6, 0]);
+    };
+    backBtn.addEventListener('click', () => {
+      experience.classList.remove('open');
+      landing.style.display = 'block';
+    });
+
+    // 相机飞行
+    let fly = null;
+    function easeInOutCubic(t) { return t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2; }
+    function flyTo(pos, look, dur = 800) {
+      fly = { sp: camera.position.clone(), sl: controls.target.clone(), ep: new THREE.Vector3(...pos), el: new THREE.Vector3(...look), t0: performance.now(), dur };
+      controls.enabled = false;
+    }
+
+    // 尺寸同步（像素风低分辨率渲染）
+    function resize() {
+      const w = container.clientWidth, h = container.clientHeight; if (!w || !h) return;
+      camera.aspect = w / h; camera.updateProjectionMatrix();
+      const s = 0.5; renderer.setSize(Math.max(1, Math.floor(w * s)), Math.max(1, Math.floor(h * s)), false);
+    }
+    new ResizeObserver(resize).observe(container); resize();
+
+    // 动画循环
+    const clock = new THREE.Clock();
+    function animate() {
+      requestAnimationFrame(animate);
+      const now = performance.now();
+      if (fly) {
+        const pr = Math.min(1, (now - fly.t0) / fly.dur); const e = easeInOutCubic(pr);
+        camera.position.lerpVectors(fly.sp, fly.ep, e);
+        controls.target.lerpVectors(fly.sl, fly.el, e); controls.update();
+        if (pr >= 1) { fly = null; controls.enabled = true; }
+      }
+      controls.update();
+      renderer.render(scene, camera);
+    }
+    animate();
+  </script>
+</body>
+</html>

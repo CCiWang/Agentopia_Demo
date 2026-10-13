@@ -11,6 +11,7 @@
 
 - [快速开始](#快速开始)
 - [功能总览](#功能总览)
+- [Social Experience Package（DLC）](#social-experience-package-dlc)
 - [技术栈](#技术栈)
 - [项目目录结构](#项目目录结构)
 - [部署到 GitHub Pages](#部署到-github-pages)
@@ -70,7 +71,21 @@ python3 -m http.server 8123
 - **下发任务**：选择 Agent + 操作（提拔/分配/奖励）→ Toast + 生成聊天消息 + 更新日报 + 3D 角色执行动作 + 任务状态流转（进行中 → 已完成）
 
 ### 6. 声音
-Web Audio API 现场合成环境音，右上角静音按钮一键开关。
+Web Audio API 现场合成环境音，右上角静音按钮一键开关；点击 🎵 可为两个场景分别上传本地音乐。
+
+---
+
+## Social Experience Package（DLC）
+
+商业模式在「订阅 + 皮肤」之外，新增 **Social Experience Package**：针对朋友毕业、生日、好友周年等特殊节点，购买专属剧情 / 主题世界，让用户 Agent 与朋友 Agent 一起生成纪念事件。
+
+对应独立页面 [dlc.html](dlc.html)，主 Demo 导航栏与首屏均有「🎁 DLC / Social Package」入口，点击跳转。含三个 3D 主题世界：
+
+| 套餐 | 主题世界 |
+|---|---|
+| 🎂 Birthday 生日 | 生日派对场景 |
+| 🎓 Graduation 毕业 | 毕业典礼场景 |
+| 💞 Friendship Anniversary 好友周年 | 好友周年纪念场景 |
 
 ---
 
@@ -91,8 +106,10 @@ Web Audio API 现场合成环境音，右上角静音按钮一键开关。
 
 ```
 AngentopiaWeb/
-├── index.html          # 唯一的核心页面（3D + 交互 + 样式 + 脚本）
+├── index.html          # 主 Demo（3D + 交互 + 样式 + 脚本）
+├── dlc.html            # Social Experience Package（DLC 落地页 + 三个纪念事件场景）
 ├── README.md           # 本文档
+├── DEMO.md             # Demo 介绍 / 汇报文档
 └── (可选) assets/      # 未来若需本地图片/音频，可放置于此
 ```
 
@@ -106,8 +123,8 @@ AngentopiaWeb/
 
    ```bash
    git init
-   git add index.html README.md
-   git commit -m "Agentopia 3D concept demo"
+   git add index.html dlc.html README.md DEMO.md
+   git commit -m "Agentopia 3D concept demo + DLC"
    git branch -M main
    git remote add origin https://github.com/<你的用户名>/<仓库名>.git
    git push -u origin main
